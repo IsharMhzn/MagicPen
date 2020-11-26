@@ -83,6 +83,7 @@ def check_position(c):
         if mode_counter < 0:
             counter_bool = False
             mode_counter = 200
+        print(mode_counter)
 
     area = cv.contourArea(c)
     if int(area) in range(150, 3000):
@@ -95,9 +96,11 @@ def check_position(c):
                 mode = 'magic'
                 counter_bool = True
                 magical = True
+                canvas.clear()
+                print("Changed mode to magic")
             elif not (x < Width // 10):
-                cv.circle(frame, (x+w//2, y), 50, active_color, )
-                cv.rectangle(frame, (x, y), (x+w, y+h), active_color, 2)
+                cv.circle(overlay, (x+w//2, y), 50, active_color, )
+                cv.rectangle(overlay, (x, y), (x+w, y+h), active_color, 2)
                 canvas.append(((x+w//2, y), active_color))
             else:
                 for color in colors.keys():
@@ -112,6 +115,8 @@ def check_position(c):
                 mode = 'draw'
                 counter_bool = True
                 magical = False
+                canvas.clear()
+                print("Changed mode to draw")
             for color in rainbow:
                 cv.circle(frame, (x+w//2, y), 7, color[::-1], -1)
                 canvas.append(((x+w//2, y), color[::-1], 1))
@@ -135,7 +140,9 @@ while True:
             magical = False
             canvas.clear()
 
-    cv.addWeighted(overlay, opacity, frame, 1-opacity, 0, frame)
+        cv.addWeighted(overlay, opacity, frame, 1-opacity, 0, frame)
+    else:
+        frame = overlay
 
     display_options(frame)
 
